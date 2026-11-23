@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Odak · Focus, planned</title>
+<meta name="description" content="Odak is a study planner for university students: focus sprints, exam countdowns that plan backwards, and honest stats. In Arabic and English.">
+<meta name="theme-color" content="#ff5b2e">
+<meta property="og:title" content="Odak · Focus, planned">
+<meta property="og:description" content="Study in focused sprints. Walk into exams ready.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&family=Rubik:wght@400;500;600;700;800&display=swap">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Odak","applicationCategory":"EducationApplication","operatingSystem":"iOS, Android","inLanguage":["ar","en"],"offers":[{"@type":"Offer","price":"0","priceCurrency":"SAR"},{"@type":"Offer","price":"11.99","priceCurrency":"SAR","name":"Pro monthly"}]}
+</script>
+<script>
+  (function () {
+    var r = document.documentElement, lang = null, th = null;
+    try { lang = localStorage.getItem('odak.lang'); th = localStorage.getItem('odak.theme'); } catch (e) {}
+    if (!lang) lang = (navigator.language || 'en').slice(0, 2) === 'ar' ? 'ar' : 'en';
+    r.lang = lang; r.dir = lang === 'ar' ? 'rtl' : 'ltr'; if (th) r.setAttribute('data-theme', th);
+  })();
+</script>
+<style>
+/* Layout: product page. Split hero with a working phone; three-step strip; feature rows each with a live widget; pricing with a billing toggle; changelog + FAQ. */
+:root{
+  --bg:#f5f6fa; --surface:#ffffff; --sunk:#eceef5; --ink:#121527; --muted:#5d6378; --line:#e0e3ed;
+  --focus:#ff5b2e; --focus-ink:#ffffff; --focus-soft:#ffe7de; --break:#3a55ff; --break-soft:#e3e7ff; --good:#14945a;
+  --phone:#0f1120; --screen:#fbfbfd; --screen-ink:#121527; --screen-muted:#727892; --screen-line:#e7e9f1; --screen-card:#ffffff;
+  --display:"Sora","Inter",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+:root[lang="ar"]{--display:"Rubik",system-ui,sans-serif;--body:"Rubik",system-ui,sans-serif}
+:root[lang="ar"] h1,:root[lang="ar"] h2,:root[lang="ar"] .feature h3{letter-spacing:0;line-height:1.3}
+:root[lang="ar"] .eyebrow{letter-spacing:0;text-transform:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c0e19; --surface:#141729; --sunk:#1b1f36; --ink:#eceefe; --muted:#959cb8; --line:#252a45;
+  --focus:#ff7a52; --focus-ink:#1a0b05; --focus-soft:#3a1e16; --break:#8193ff; --break-soft:#1f2550; --good:#3ccf8e;
+  --phone:#05060c; --screen:#10121f; --screen-ink:#eceefe; --screen-muted:#8b92ae; --screen-line:#22263d; --screen-card:#171a2c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c0e19; --surface:#141729; --sunk:#1b1f36; --ink:#eceefe; --muted:#959cb8; --line:#252a45;
+  --focus:#ff7a52; --focus-ink:#1a0b05; --focus-soft:#3a1e16; --break:#8193ff; --break-soft:#1f2550; --good:#3ccf8e;
+  --phone:#05060c; --screen:#10121f; --screen-ink:#eceefe; --screen-muted:#8b92ae; --screen-line:#22263d; --screen-card:#171a2c; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+button,input,select{font:inherit;color:inherit}
+svg{max-width:100%}
+a{color:var(--focus)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1160px;margin-inline:auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.num{font-variant-numeric:tabular-nums}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px)}
+.bar .wrap{display:flex;align-items:center;gap:1.4rem;height:66px}
+.logo{display:flex;align-items:center;gap:.55rem;color:var(--ink);text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.25rem}
+.logo svg{width:30px;height:30px}
+.nav{display:flex;gap:.3rem;margin-inline-start:auto}
+.nav a{color:var(--muted);text-decoration:none;font-size:.92rem;padding:.35rem .7rem;border-radius:8px}
+.nav a:hover{color:var(--ink);background:var(--sunk)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:12px;padding:.75rem 1.2rem;font-weight:600;text-decoration:none;cursor:pointer;border:1px solid transparent;font-size:.95rem;transition:transform .12s,filter .15s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--focus);color:var(--focus-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.dark{background:var(--ink);color:var(--bg)}
+.btn.ghost{border-color:var(--line);background:var(--surface);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.sm{padding:.45rem .85rem;font-size:.86rem}
+.icon{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer}
+.icon svg{width:17px;height:17px}
+@media (max-width:860px){.nav{display:none}.bar .tools{margin-inline-start:auto}}
+.tools{display:flex;gap:.5rem;align-items:center}
+
+/* hero */
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:center;padding-block:3rem 4rem}
+.kicker{display:inline-flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:.3rem .8rem .3rem .35rem;background:var(--surface)}
+.kicker b{background:var(--focus-soft);color:var(--focus);border-radius:999px;padding:.05rem .55rem;font-size:.75rem}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.5rem,6vw,4.4rem);line-height:1.04;letter-spacing:-.035em;margin:1.1rem 0 1rem;text-wrap:balance}
+h1 .ring{color:var(--focus)}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:44ch;margin:0}
+.stores{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.7rem}
+.store{display:flex;align-items:center;gap:.7rem;background:var(--ink);color:var(--bg);border-radius:14px;padding-block:.6rem;padding-inline:.9rem 1.1rem;text-decoration:none;min-width:180px}
+.store svg{width:24px;height:24px}
+.store small{display:block;font-size:.7rem;opacity:.75;line-height:1.2}
+.store b{display:block;font-size:1rem;line-height:1.25}
+.proof{display:flex;flex-wrap:wrap;gap:1.6rem;margin-top:2rem;font-size:.88rem;color:var(--muted)}
+.proof b{display:block;font-family:var(--display);font-size:1.35rem;color:var(--ink)}
+.stage{position:relative;display:grid;place-items:center}
+.stage::before{content:"";position:absolute;width:420px;height:420px;max-width:100%;border-radius:50%;background:radial-gradient(circle,var(--focus-soft),transparent 68%);z-index:0}
+.try{position:absolute;bottom:-1.6rem;left:50%;transform:translateX(-50%);font-size:.8rem;color:var(--muted);white-space:nowrap}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr;gap:3.5rem;padding-block:2rem 4rem}}
+
+/* phone */
+.phone{position:relative;z-index:1;width:310px;max-width:100%;aspect-ratio:310/640;background:var(--phone);border-radius:46px;padding:11px;box-shadow:0 50px 90px -40px rgba(20,20,60,.55),inset 0 0 0 2px rgba(255,255,255,.06)}
+.screen{position:relative;height:100%;background:var(--screen);color:var(--screen-ink);border-radius:36px;overflow:hidden;display:flex;flex-direction:column;font-size:13px}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:92px;height:26px;border-radius:20px;background:var(--phone);z-index:3}
+.status{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 0;font-weight:600;font-size:12px;height:40px}
+.status svg{width:38px;height:12px}
+.app{flex:1;overflow:hidden;position:relative}
+.view{position:absolute;inset:0;padding:10px 16px 12px;overflow-y:auto;scrollbar-width:none}
+.view::-webkit-scrollbar{display:none}
+.view[hidden]{display:none!important}
+.app h3{font-family:var(--display);font-size:20px;margin:4px 0 2px;letter-spacing:-.02em}
+.app .sub{color:var(--screen-muted);font-size:12px;margin:0 0 10px}
+.subjects{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.subjects::-webkit-scrollbar{display:none}
+.subj{flex:none;border:1px solid var(--screen-line);background:var(--screen-card);border-radius:999px;padding:5px 10px;font-size:11.5px;cursor:pointer;color:var(--screen-muted)}
+.subj[aria-pressed="true"]{border-color:var(--focus);color:var(--focus);font-weight:600}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--screen-line);border-radius:12px;padding:3px;margin:12px 0 4px}
+.modes button{border:0;background:transparent;border-radius:9px;padding:6px 0;font-size:11.5px;cursor:pointer;color:var(--screen-muted);font-weight:600}
+.modes button[aria-pressed="true"]{background:var(--screen-card);color:var(--screen-ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.dial{position:relative;width:200px;height:200px;margin:8px auto 4px}
+.dial svg{width:100%;height:100%;transform:rotate(-90deg)}
+:root[dir="rtl"] .dial svg{transform:rotate(-90deg) scaleY(-1)}
+.dial .time{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.dial .time b{font-family:var(--display);font-size:40px;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.dial .time span{font-size:11px;color:var(--screen-muted);margin-top:4px}
+.dots{display:flex;justify-content:center;gap:6px;margin:4px 0 10px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--screen-line)}
+.dots i.on{background:var(--focus)}
+.controls{display:flex;justify-content:center;align-items:center;gap:14px}
+.cbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--screen-line);background:var(--screen-card);display:grid;place-items:center;cursor:pointer;color:var(--screen-ink)}
+.cbtn svg{width:16px;height:16px}
+.cbtn.main{width:62px;height:62px;border:0;background:var(--focus);color:#fff}
+.cbtn.main svg{width:22px;height:22px}
+.speed{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:11px;color:var(--screen-muted)}
+.speed input{accent-color:var(--focus)}
+.tabbar{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--screen-line);padding:6px 10px 18px;background:var(--screen)}
+.tabbar button{border:0;background:transparent;display:grid;justify-items:center;gap:2px;font-size:10.5px;color:var(--screen-muted);cursor:pointer;padding:4px 0}
+.tabbar svg{width:20px;height:20px}
+.tabbar button[aria-selected="true"]{color:var(--focus);font-weight:600}
+.exam{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;padding:9px;border-radius:12px;background:var(--screen-card);border:1px solid var(--screen-line);margin-bottom:6px}
+.exam .d{border-radius:10px;background:var(--focus-soft);color:var(--focus);text-align:center;padding:4px 0;line-height:1.1}
+.exam .d b{display:block;font-family:var(--display);font-size:17px}
+.exam .d small{font-size:9px}
+.exam strong{display:block;font-size:12.5px}
+.exam span{font-size:11px;color:var(--screen-muted)}
+.addtask{display:flex;gap:6px;margin:10px 0 6px}
+.addtask input{flex:1;min-width:0;border:1px solid var(--screen-line);background:var(--screen-card);border-radius:10px;padding:7px 9px;font-size:12px;color:var(--screen-ink);outline:0}
+.addtask button{border:0;background:var(--screen-ink);color:var(--screen);border-radius:10px;padding:0 11px;cursor:pointer;font-weight:700}
+.task{display:flex;align-items:center;gap:8px;padding:7px 2px;border-bottom:1px solid var(--screen-line);font-size:12.5px}
+.task input{accent-color:var(--focus);width:16px;height:16px;flex:none}
+.task.done span{text-decoration:line-through;color:var(--screen-muted)}
+.task button{margin-inline-start:auto;border:0;background:transparent;color:var(--screen-muted);cursor:pointer;font-size:14px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.kpi{background:var(--screen-card);border:1px solid var(--screen-line);border-radius:12px;padding:8px 10px}
+.kpi b{display:block;font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:10.5px;color:var(--screen-muted)}
+.bars{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:110px;padding:8px 4px 0;background:var(--screen-card);border:1px solid var(--screen-line);border-radius:12px}
+.bars div{display:grid;justify-items:center;gap:3px;height:100%;align-content:end}
+.bars i{width:100%;max-width:18px;border-radius:5px 5px 2px 2px;background:var(--focus);opacity:.85;min-height:2px}
+.bars div.today i{opacity:1;background:var(--focus)}
+.bars small{font-size:9.5px;color:var(--screen-muted);padding-bottom:5px}
+.split{margin-top:8px;display:grid;gap:5px}
+.split div{display:grid;grid-template-columns:1fr auto;gap:4px;font-size:11.5px}
+.split .meter{grid-column:1/-1;height:5px;border-radius:5px;background:var(--screen-line);overflow:hidden}
+.split .meter i{display:block;height:100%;border-radius:5px}
+.banner{position:absolute;left:10px;right:10px;top:46px;background:var(--screen-ink);color:var(--screen);border-radius:16px;padding:10px 12px;font-size:12px;z-index:5;transform:translateY(-150%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;gap:9px;align-items:center}
+.banner.on{transform:none}
+.banner i{width:26px;height:26px;border-radius:8px;background:var(--focus);flex:none}
+
+/* sections */
+section.band{padding-block:5rem}
+.eyebrow{font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--focus)}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,4vw,2.9rem);letter-spacing:-.03em;line-height:1.12;margin:.5rem 0 .8rem;text-wrap:balance}
+.center{text-align:center;max-width:680px;margin-inline:auto}
+.center p{color:var(--muted);font-size:1.05rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.4rem}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:1.4rem}
+.step .n{font-family:var(--display);font-weight:700;color:var(--focus);font-size:.9rem}
+.step h3{font-family:var(--display);margin:.4rem 0 .3rem;font-size:1.2rem;letter-spacing:-.01em}
+.step p{margin:0;color:var(--muted);font-size:.95rem}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+
+.feature{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;padding-block:3rem}
+.feature + .feature{border-top:1px solid var(--line)}
+.feature.flip > :first-child{order:2}
+.feature h3{font-family:var(--display);font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.025em;line-height:1.15;margin:.4rem 0 .7rem}
+.feature p{color:var(--muted);margin:0 0 1rem;max-width:48ch}
+.feature ul{margin:0;padding:0;list-style:none;display:grid;gap:.4rem;font-size:.95rem}
+.feature li{display:flex;gap:.55rem}
+.feature li::before{content:"";width:18px;height:18px;flex:none;margin-top:.2rem;border-radius:6px;background:var(--focus-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5b2e' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center/12px no-repeat}
+.widget{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1.4rem;box-shadow:0 24px 50px -36px rgba(20,20,60,.4);min-width:0}
+.widget h4{margin:0 0 .9rem;font-size:.95rem}
+@media (max-width:900px){.feature{grid-template-columns:1fr;gap:1.6rem}.feature.flip > :first-child{order:0}}
+
+.wf{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+.wf label{display:grid;gap:.25rem;font-size:.8rem;color:var(--muted)}
+.wf input{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:.55rem .65rem;width:100%;min-width:0}
+.planout{margin-top:1rem;display:grid;gap:.35rem}
+.prow{display:grid;grid-template-columns:96px 1fr auto;gap:.7rem;align-items:center;font-size:.86rem}
+.prow .track{height:10px;border-radius:6px;background:var(--sunk);overflow:hidden;display:flex}
+.prow .track i{height:100%}
+.prow small{color:var(--muted);font-variant-numeric:tabular-nums}
+.verdict{margin-top:.8rem;padding:.7rem .9rem;border-radius:12px;font-size:.9rem;background:var(--sunk)}
+.verdict.warn{background:var(--focus-soft);color:var(--focus)}
+@media (max-width:520px){.wf{grid-template-columns:1fr 1fr}.prow{grid-template-columns:80px 1fr auto}}
+
+.sounds{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
+.snd{border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:.9rem .6rem;cursor:pointer;display:grid;justify-items:center;gap:.35rem;font-size:.86rem;font-weight:600}
+.snd svg{width:26px;height:26px;color:var(--muted)}
+.snd[aria-pressed="true"]{border-color:var(--focus);background:var(--focus-soft);color:var(--focus)}
+.snd[aria-pressed="true"] svg{color:var(--focus)}
+.vol{display:flex;align-items:center;gap:.7rem;margin-top:1rem;font-size:.85rem;color:var(--muted)}
+.vol input{flex:1;accent-color:var(--focus)}
+.viz{height:46px;margin-top:.8rem;display:flex;align-items:center;gap:3px}
+.viz i{flex:1;background:var(--focus);border-radius:3px;height:4px;opacity:.75;transition:height .08s}
+
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;overflow-x:auto;padding-bottom:4px}
+.heat i{width:13px;height:13px;border-radius:3px;background:var(--sunk)}
+.heat i[data-l="1"]{background:color-mix(in srgb,var(--focus) 25%,var(--sunk))}
+.heat i[data-l="2"]{background:color-mix(in srgb,var(--focus) 50%,var(--sunk))}
+.heat i[data-l="3"]{background:color-mix(in srgb,var(--focus) 75%,var(--sunk))}
+.heat i[data-l="4"]{background:var(--focus)}
+.heat-foot{display:flex;justify-content:space-between;align-items:center;margin-top:.7rem;font-size:.8rem;color:var(--muted);gap:1rem;flex-wrap:wrap}
+.legend{display:flex;align-items:center;gap:3px}
+.legend i{width:11px;height:11px;border-radius:3px}
+.tip{min-height:1.4em;font-size:.86rem;margin-top:.5rem}
+
+/* pricing */
+.billing{display:inline-flex;align-items:center;gap:.3rem;border:1px solid var(--line);border-radius:999px;padding:4px;background:var(--surface);margin-top:1rem}
+.billing button{border:0;background:transparent;border-radius:999px;padding:.4rem 1rem;cursor:pointer;font-weight:600;color:var(--muted);font-size:.9rem}
+.billing button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.billing em{font-style:normal;font-size:.72rem;background:var(--focus-soft);color:var(--focus);border-radius:999px;padding:.05rem .45rem;margin-inline-start:.3rem}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.2rem;text-align:start}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1.5rem;display:flex;flex-direction:column;gap:.8rem}
+.plan.pro{border-color:var(--focus);box-shadow:0 0 0 1px var(--focus),0 30px 60px -40px var(--focus)}
+.plan h3{margin:0;font-family:var(--display);font-size:1.15rem}
+.plan .price{font-family:var(--display);font-size:2.5rem;font-weight:700;letter-spacing:-.03em;line-height:1}
+.plan .price small{font-size:.9rem;color:var(--muted);font-weight:500;letter-spacing:0}
+.plan .note{font-size:.82rem;color:var(--muted);min-height:1.3em}
+.plan ul{margin:0;padding:0;list-style:none;display:grid;gap:.45rem;font-size:.92rem;flex:1}
+.plan li{display:flex;gap:.5rem}
+.plan li::before{content:"✓";color:var(--focus);font-weight:700}
+.plan li.off{color:var(--muted)}
+.plan li.off::before{content:"–";color:var(--muted)}
+@media (max-width:900px){.plans{grid-template-columns:1fr}}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.log{display:grid;gap:1.2rem}
+.log div{display:grid;grid-template-columns:76px 1fr;gap:1rem}
+.log b{font-family:var(--display);font-size:.9rem}
+.log small{display:block;color:var(--muted);font-size:.78rem}
+.log p{margin:0;font-size:.93rem}
+.log .tag{display:inline-block;font-size:.7rem;font-weight:700;border-radius:6px;padding:0 .4rem;margin-inline-end:.3rem;background:var(--break-soft);color:var(--break)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;padding:1rem 0;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:1rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:1.3rem;line-height:1;color:var(--muted)}
+.faq details[open] summary::after{content:"−"}
+.faq p{margin:0 0 1rem;color:var(--muted)}
+.cta{background:var(--ink);color:var(--bg);border-radius:28px;padding:3rem 2rem;text-align:center}
+.cta h2{color:var(--bg)}
+.cta p{opacity:.75;margin:0 auto 1.5rem;max-width:46ch}
+.cta .store{background:var(--bg);color:var(--ink)}
+footer{padding-block:2rem 3rem;color:var(--muted);font-size:.85rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line)" stroke-width="4"/><path d="M16 4a12 12 0 0 1 11.4 15.7" fill="none" stroke="var(--focus)" stroke-width="4" stroke-linecap="round"/><circle cx="16" cy="16" r="3.5" fill="var(--ink)"/></svg><span data-i18n="brand">Odak</span></a>
+    <nav class="nav" aria-label="main"><a href="#how" data-i18n="nHow">How it works</a><a href="#features" data-i18n="nFeat">Features</a><a href="#pricing" data-i18n="nPrice">Pricing</a><a href="#faq" data-i18n="nFaq">FAQ</a></nav>
+    <div class="tools">
+      <button class="icon" id="langBtn" type="button" aria-label="Language" style="font-weight:700;font-size:.85rem">ع</button>
+      <button class="icon" id="themeBtn" type="button" aria-label="Dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="btn primary sm" href="#download" data-i18n="getApp">Get Odak</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="kicker"><b data-i18n="new">New</b> <span data-i18n="kicker">Exam mode plans your revision backwards</span></span>
+        <h1 data-i18n-html="h1">Study in focused sprints. Walk into exams <span class="ring">ready.</span></h1>
+        <p class="lead" data-i18n="lead">Odak turns your exam dates into a daily plan, keeps you in 25-minute focus sprints, and shows you exactly where your hours went.</p>
+        <div class="stores" id="download"></div>
+        <div class="proof">
+          <div><b data-i18n="p1b">25 min</b><span data-i18n="p1">default focus sprint</span></div>
+          <div><b data-i18n="p2b">Offline</b><span data-i18n="p2">works with no signal</span></div>
+          <div><b data-i18n="p3b">Free</b><span data-i18n="p3">for core features</span></div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="phone" id="phone">
+          <div class="screen">
+            <div class="island"></div>
+            <div class="status" dir="ltr"><span id="clock" class="num">9:41</span><svg viewBox="0 0 38 12" aria-hidden="true"><g fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="23" y="1" width="13" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="25" y="3" width="8" height="6" rx="1.5"/></g></svg></div>
+            <div class="banner" id="banner" role="status"><i></i><div><b id="bannerTitle"></b><div id="bannerText" style="opacity:.75"></div></div></div>
+            <div class="app">
+              <div class="view" id="vFocus">
+                <h3 id="greet"></h3>
+                <p class="sub" id="focusSub"></p>
+                <div class="subjects" id="subjects"></div>
+                <div class="modes" role="group" aria-label="Mode"><button type="button" data-mode="focus" aria-pressed="true" data-i18n="mFocus">Focus 25</button><button type="button" data-mode="short" aria-pressed="false" data-i18n="mShort">Break 5</button><button type="button" data-mode="long" aria-pressed="false" data-i18n="mLong">Long 15</button></div>
+                <div class="dial"><svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="88" fill="none" style="stroke:var(--screen-line)" stroke-width="10"/><circle id="arc" cx="100" cy="100" r="88" fill="none" stroke="var(--focus)" stroke-width="10" stroke-linecap="round" stroke-dasharray="552.92" stroke-dashoffset="0"/></svg><div class="time"><b id="time" dir="ltr">25:00</b><span id="timeLabel"></span></div></div>
+                <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+                <div class="controls">
+                  <button class="cbtn" type="button" id="reset" aria-label="Reset"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+                  <button class="cbtn main" type="button" id="play" aria-label="Start"><svg viewBox="0 0 24 24" fill="currentColor" id="playIcon"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+                  <button class="cbtn" type="button" id="skip" aria-label="Skip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l9 7-9 7z"/><path d="M19 5v14"/></svg></button>
+                </div>
+                <label class="speed"><input type="checkbox" id="fast"> <span data-i18n="fast">Demo speed (1 minute = 1 second)</span></label>
+              </div>
+              <div class="view" id="vPlan" hidden>
+                <h3 data-i18n="planT">Exam plan</h3>
+                <p class="sub" data-i18n="planS">Final exams this term</p>
+                <div id="exams"></div>
+                <form class="addtask" id="taskForm"><input id="taskIn" maxlength="60" aria-label="New task"><button type="submit" aria-label="Add">+</button></form>
+                <div id="tasks"></div>
+              </div>
+              <div class="view" id="vStats" hidden>
+                <h3 data-i18n="statT">This week</h3>
+                <p class="sub" id="statSub"></p>
+                <div class="kpis"><div class="kpi"><b id="kMin">0</b><span data-i18n="kMin">minutes focused</span></div><div class="kpi"><b id="kStreak">0</b><span data-i18n="kStreak">day streak</span></div></div>
+                <div class="bars" id="bars"></div>
+                <div class="split" id="split"></div>
+              </div>
+            </div>
+            <div class="tabbar" role="tablist">
+              <button type="button" role="tab" data-tab="vFocus" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg><span data-i18n="tabFocus">Focus</span></button>
+              <button type="button" role="tab" data-tab="vPlan" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg><span data-i18n="tabPlan">Plan</span></button>
+              <button type="button" role="tab" data-tab="vStats" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span data-i18n="tabStats">Stats</span></button>
+            </div>
+          </div>
+        </div>
+        <span class="try" data-i18n="try">This is the real app UI. Tap around.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="how" style="padding-top:2rem">
+    <div class="wrap">
+      <div class="center"><div class="eyebrow" data-i18n="howE">How it works</div><h2 data-i18n="howT">Three habits, one app</h2><p data-i18n="howL">Most study apps are timers or to-do lists. Odak connects the plan, the sprint and the review, so each one makes the next one better.</p></div>
+      <div class="steps" id="steps"></div>
+    </div>
+  </section>
+
+  <section class="band" id="features" style="padding-top:1rem">
+    <div class="wrap">
+      <div class="feature">
+        <div>
+          <div class="eyebrow" data-i18n="f1e">Exam mode</div>
+          <h3 data-i18n="f1t">Know today if your plan still fits</h3>
+          <p data-i18n="f1p">Enter the exam date, how many chapters are left and how long you can study per day. Odak tells you how much to cover each day, and warns you early when the math stops working.</p>
+          <ul id="f1l"></ul>
+        </div>
+        <div class="widget">
+          <h4 data-i18n="w1t">Try it with your next exam</h4>
+          <div class="wf">
+            <label><span data-i18n="wDate">Exam date</span><input type="date" id="wDate"></label>
+            <label><span data-i18n="wCh">Chapters left</span><input type="number" id="wCh" min="1" max="40" value="8"></label>
+            <label><span data-i18n="wH">Hours per day</span><input type="number" id="wH" min="0.5" max="12" step="0.5" value="2"></label>
+          </div>
+          <div class="planout" id="planOut"></div>
+          <div class="verdict" id="planVerdict"></div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div>
+          <div class="eyebrow" data-i18n="f2e">Focus sounds</div>
+          <h3 data-i18n="f2t">Background sound, made on your phone</h3>
+          <p data-i18n="f2p">Rain, brown noise and a quiet room tone are generated live, so they never loop or stop at an awkward moment, and they use no data.</p>
+          <ul id="f2l"></ul>
+        </div>
+        <div class="widget">
+          <h4 data-i18n="w2t">Press one to listen</h4>
+          <div class="sounds" id="sounds">
+            <button class="snd" type="button" data-snd="rain" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 15a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.8 3.8 0 0 1 0 7.5"/><path d="M9 18l-1 2.5M13 18l-1 2.5M17 18l-1 2.5"/></svg><span data-i18n="sRain">Rain</span></button>
+            <button class="snd" type="button" data-snd="brown" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12c2-5 4-5 6 0s4 5 6 0 4-5 6 0"/></svg><span data-i18n="sBrown">Brown noise</span></button>
+            <button class="snd" type="button" data-snd="room" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg><span data-i18n="sRoom">Quiet room</span></button>
+          </div>
+          <label class="vol"><span data-i18n="vol">Volume</span><input type="range" id="vol" min="0" max="1" step="0.01" value="0.5"></label>
+          <div class="viz" id="viz" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div>
+          <div class="eyebrow" data-i18n="f3e">Streaks</div>
+          <h3 data-i18n="f3t">A semester of effort, in one view</h3>
+          <p data-i18n="f3p">Every square is a day. The darker it is, the longer you focused. Gaps are easy to spot, and so are the weeks before exams.</p>
+          <ul id="f3l"></ul>
+        </div>
+        <div class="widget">
+          <h4 data-i18n="w3t">Example semester</h4>
+          <div class="heat" id="heat" role="img" aria-label="Heatmap" dir="ltr"></div>
+          <div class="tip" id="heatTip"></div>
+          <div class="heat-foot"><span id="heatSum"></span><span class="legend"><span data-i18n="less">Less</span> <i style="background:var(--sunk)"></i><i style="background:color-mix(in srgb,var(--focus) 25%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--focus) 50%,var(--sunk))"></i><i style="background:color-mix(in srgb,var(--focus) 75%,var(--sunk))"></i><i style="background:var(--focus)"></i> <span data-i18n="moreL">More</span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="pricing" style="background:var(--surface);border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="center"><div class="eyebrow" data-i18n="prE">Pricing</div><h2 data-i18n="prT">Free for focus. Pro for exam season.</h2><p data-i18n="prL">Every plan includes unlimited sprints and works offline. Sign up with a university email (.edu.sa, .edu.qa, .edu.eg…) and Pro is 50% off.</p>
+        <div class="billing" role="group" aria-label="Billing"><button type="button" data-bill="m" aria-pressed="false" data-i18n="monthly">Monthly</button><button type="button" data-bill="y" aria-pressed="true"><span data-i18n="yearly">Yearly</span> <em data-i18n="save">save 33%</em></button></div>
+      </div>
+      <div class="plans" id="plans"></div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap two">
+      <div>
+        <div class="eyebrow" data-i18n="clE">Changelog</div>
+        <h2 data-i18n="clT">Shipped recently</h2>
+        <div class="log" id="log"></div>
+      </div>
+      <div class="faq" id="faq">
+        <div class="eyebrow" data-i18n="fqE">FAQ</div>
+        <h2 data-i18n="fqT">Questions</h2>
+        <div id="faqList"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap"><div class="cta"><h2 data-i18n="ctaT">Your next exam is closer than it looks</h2><p data-i18n="ctaP">Install Odak, add the date, and start your first sprint in under a minute.</p><div class="stores" id="stores2" style="justify-content:center"></div></div></div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>© <span id="yr"></span> Odak · <span data-i18n="demo">Demo product page for a portfolio</span></span><span data-i18n="credit">Designed &amp; built by Mohamed Yehia</span></div></footer>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, el) { return (el || document).querySelector(s); };
+  var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem('odak.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem('odak.' + k, JSON.stringify(v)); } catch (e) {} }
+  };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var dayKey = function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+  var lang = document.documentElement.lang === 'ar' ? 'ar' : 'en';
+  var LI = function () { return lang === 'ar' ? 1 : 0; };
+  var LOC = function () { return lang === 'ar' ? 'ar-SA-u-nu-latn-ca-gregory' : 'en-GB'; };
+
+  var I = {
+    brand: ['Odak', 'أوداك'], nHow: ['How it works', 'كيف يعمل'], nFeat: ['Features', 'المميزات'], nPrice: ['Pricing', 'الأسعار'], nFaq: ['FAQ', 'أسئلة'], getApp: ['Get Odak', 'حمّل أوداك'],
+    new: ['New', 'جديد'], kicker: ['Exam mode plans your revision backwards', 'وضع الامتحانات يخطط مراجعتك بالعكس'],
+    h1: ['Study in focused sprints. Walk into exams <span class="ring">ready.</span>', 'ذاكر على جولات تركيز قصيرة، وادخل الامتحان <span class="ring">جاهزاً.</span>'],
+    lead: ['Odak turns your exam dates into a daily plan, keeps you in 25-minute focus sprints, and shows you exactly where your hours went.', 'أوداك يحوّل مواعيد امتحاناتك إلى خطة يومية، ويبقيك في جولات تركيز مدتها ٢٥ دقيقة، ويريك بالضبط أين ذهبت ساعاتك.'],
+    iphoneS: ['Download for', 'حمّله على'], iphone: ['iPhone', 'آيفون'], androidS: ['Get it for', 'احصل عليه على'], android: ['Android', 'أندرويد'],
+    p1b: ['25 min', '٢٥ دقيقة'], p1: ['default focus sprint', 'مدة جولة التركيز'], p2b: ['Offline', 'بدون إنترنت'], p2: ['works with no signal', 'يعمل بدون اتصال'], p3b: ['Free', 'مجاني'], p3: ['for core features', 'للمميزات الأساسية'],
+    try: ['This is the real app UI. Tap around.', 'هذه واجهة التطبيق الحقيقية. جرّبها.'],
+    mFocus: ['Focus 25', 'تركيز ٢٥'], mShort: ['Break 5', 'راحة ٥'], mLong: ['Long 15', 'راحة ١٥'], fast: ['Demo speed (1 minute = 1 second)', 'سرعة العرض (الدقيقة = ثانية)'],
+    tabFocus: ['Focus', 'تركيز'], tabPlan: ['Plan', 'الخطة'], tabStats: ['Stats', 'إحصائيات'],
+    gm: ['Good morning', 'صباح الخير'], ga: ['Good afternoon', 'مساء الخير'], ge: ['Good evening', 'مساء الخير'],
+    pick: ['Pick a course and start a sprint.', 'اختر مادة وابدأ جولة تركيز.'], today: ['{m} minutes focused today. Keep going.', '{m} دقيقة تركيز اليوم. استمر.'],
+    shortB: ['Short break', 'راحة قصيرة'], longB: ['Long break', 'راحة طويلة'],
+    done: ['Sprint complete', 'انتهت الجولة'], doneT: ['+{m} min on {s}. ', '+{m} دقيقة في {s}. '], takeLong: ['Take a long break.', 'خذ راحة طويلة.'], take5: ['Take 5 minutes.', 'خذ ٥ دقائق راحة.'],
+    breakOver: ['Break is over', 'انتهت الراحة'], ready: ['Ready for the next sprint?', 'جاهز للجولة التالية؟'],
+    planT: ['Exam plan', 'خطة الامتحانات'], planS: ['Final exams this term', 'امتحانات نهاية الفصل'], daysL: ['days', 'يوم'], dayL: ['day', 'يوم'], room: ['Hall', 'قاعة'], noTasks: ['No tasks yet.', 'لا توجد مهام بعد.'], taskPh: ['Add a task, e.g. Ch. 5 exercises', 'أضف مهمة، مثل: تمارين الفصل ٥'],
+    statT: ['This week', 'هذا الأسبوع'], kMin: ['minutes focused', 'دقيقة تركيز'], kStreak: ['day streak', 'أيام متتالية'], statSub: ['{h} hours across {n} courses', '{h} ساعة في {n} مواد'], min: ['min', 'د'],
+    howE: ['How it works', 'كيف يعمل'], howT: ['Three habits, one app', 'ثلاث عادات في تطبيق واحد'],
+    howL: ['Most study apps are timers or to-do lists. Odak connects the plan, the sprint and the review, so each one makes the next one better.', 'معظم تطبيقات المذاكرة مؤقت أو قائمة مهام فقط. أوداك يربط الخطة بجولة التركيز بالمراجعة، فكل خطوة تحسّن التي بعدها.'],
+    f1e: ['Exam mode', 'وضع الامتحانات'], f1t: ['Know today if your plan still fits', 'اعرف اليوم إن كانت خطتك ما زالت كافية'],
+    f1p: ['Enter the exam date, how many chapters are left and how long you can study per day. Odak tells you how much to cover each day, and warns you early when the math stops working.', 'أدخل موعد الامتحان، وعدد الفصول المتبقية، وكم ساعة تذاكر يومياً. يخبرك أوداك بما يجب إنجازه كل يوم، وينبهك مبكراً إذا لم يعد الوقت كافياً.'],
+    w1t: ['Try it with your next exam', 'جرّبه مع امتحانك القادم'], wDate: ['Exam date', 'موعد الامتحان'], wCh: ['Chapters left', 'الفصول المتبقية'], wH: ['Hours per day', 'ساعات يومياً'],
+    studyD: ['Study days', 'أيام المذاكرة'], revD: ['Revision days', 'أيام المراجعة'], perDay: ['Per day', 'يومياً'], chapters: ['chapters', 'فصل'], everyN: ['1 chapter every {n} days', 'فصل كل {n} أيام'], sprints: ['sprints', 'جولات'], dShort: ['d', 'ي'],
+    future: ['Pick a date in the future.', 'اختر تاريخاً في المستقبل.'], fits: ['The plan fits. You have about <b>{h} spare hours</b> before revision starts.', 'الخطة كافية. لديك حوالي <b>{h} ساعة إضافية</b> قبل أيام المراجعة.'],
+    short: ['Short by about <b>{h} hours</b>. Study {d} h a day, or start today.', 'ينقصك حوالي <b>{h} ساعة</b>. ذاكر {d} ساعة يومياً، أو ابدأ من اليوم.'],
+    f2e: ['Focus sounds', 'أصوات التركيز'], f2t: ['Background sound, made on your phone', 'صوت خلفية يُصنع على جوالك'],
+    f2p: ['Rain, brown noise and a quiet room tone are generated live, so they never loop or stop at an awkward moment, and they use no data.', 'صوت المطر والضوضاء البنية وهدوء الغرفة تُولّد مباشرة، فلا تتكرر ولا تتوقف فجأة، ولا تستهلك أي بيانات.'],
+    w2t: ['Press one to listen', 'اضغط على صوت لتسمعه'], sRain: ['Rain', 'مطر'], sBrown: ['Brown noise', 'ضوضاء بنية'], sRoom: ['Quiet room', 'غرفة هادئة'], vol: ['Volume', 'الصوت'],
+    f3e: ['Streaks', 'الاستمرارية'], f3t: ['A semester of effort, in one view', 'فصل دراسي كامل في نظرة واحدة'],
+    f3p: ['Every square is a day. The darker it is, the longer you focused. Gaps are easy to spot, and so are the weeks before exams.', 'كل مربع يوم، وكلما كان أغمق كان تركيزك أطول. ستلاحظ الأيام الفارغة بسهولة، وأسابيع ما قبل الامتحانات أيضاً.'],
+    w3t: ['Example semester', 'مثال لفصل دراسي'], less: ['Less', 'أقل'], moreL: ['More', 'أكثر'], hover: ['Hover a day.', 'مرّر على أي يوم.'], rest: ['rest day', 'يوم راحة'], heatSum: ['{h} hours over {d} active days', '{h} ساعة في {d} يوم نشط'],
+    prE: ['Pricing', 'الأسعار'], prT: ['Free for focus. Pro for exam season.', 'مجاني للتركيز، وبرو لموسم الامتحانات.'],
+    prL: ['Every plan includes unlimited sprints and works offline. Sign up with a university email (.edu.sa, .edu.qa, .edu.eg…) and Pro is 50% off.', 'كل الباقات فيها جولات غير محدودة وتعمل بدون إنترنت. سجّل بإيميل جامعتك، مثل \u2066.edu.sa\u2069 أو \u2066.edu.qa\u2069 أو \u2066.edu.eg\u2069، واحصل على برو بخصم ٥٠٪.'],
+    monthly: ['Monthly', 'شهري'], yearly: ['Yearly', 'سنوي'], save: ['save 33%', 'وفّر ٣٣٪'], perMonth: ['/month', '/شهرياً'], billedY: ['Billed {p} yearly', 'يُدفع {p} سنوياً'], billedM: ['Billed monthly', 'يُدفع شهرياً'],
+    clE: ['Changelog', 'التحديثات'], clT: ['Shipped recently', 'أُطلق مؤخراً'], fqE: ['FAQ', 'أسئلة شائعة'], fqT: ['Questions', 'أسئلة'],
+    ctaT: ['Your next exam is closer than it looks', 'امتحانك القادم أقرب مما تظن'], ctaP: ['Install Odak, add the date, and start your first sprint in under a minute.', 'حمّل أوداك، أضف الموعد، وابدأ أول جولة تركيز في أقل من دقيقة.'],
+    demo: ['Demo product page for a portfolio', 'صفحة منتج تجريبية ضمن معرض أعمال'], credit: ['Designed & built by Mohamed Yehia', 'تصميم وبرمجة: محمد يحيى']
+  };
+  var t = function (k, v) { var s = (I[k] || [k, k])[LI()]; if (v) Object.keys(v).forEach(function (x) { s = s.replace('{' + x + '}', v[x]); }); return s; };
+  var tx = function (p) { return Array.isArray(p) ? p[LI()] : p; };
+
+  var SUBJECTS = [
+    { id: 'calc', n: ['Calculus II', 'التفاضل والتكامل ٢'], c: '#ff5b2e' },
+    { id: 'ds', n: ['Data Structures', 'هياكل البيانات'], c: '#3a55ff' },
+    { id: 'chem', n: ['Organic Chemistry', 'الكيمياء العضوية'], c: '#14945a' },
+    { id: 'phys', n: ['Physics I', 'فيزياء ١'], c: '#b25ad8' }
+  ];
+  var subjName = function (id) { return tx(SUBJECTS.filter(function (s) { return s.id === id; })[0].n); };
+  var EXAMS = [{ s: 'calc', in: 9, room: 'B-204' }, { s: 'ds', in: 13, room: 'C-110' }, { s: 'chem', in: 16, room: 'A-305' }, { s: 'phys', in: 20, room: 'B-118' }];
+  var MODES = { focus: 25, short: 5, long: 15 };
+
+  var log = store.get('log2', null);
+  if (!log) { log = seedLog(); store.set('log2', log); }
+  var tasks = store.get('tasks2', [
+    { t: ['Integration by parts: 12 practice problems', 'التكامل بالتجزئة: ١٢ مسألة'], done: false },
+    { t: ['Binary search trees: insert and delete by hand', 'أشجار البحث الثنائية: الإضافة والحذف يدوياً'], done: true },
+    { t: ['Reaction mechanisms summary sheet', 'ملخص آليات التفاعل'], done: false }
+  ]);
+  var subject = store.get('subject2', 'calc');
+  function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var x = Math.imul(a ^ a >>> 15, 1 | a); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; }; }
+  function seedLog() {
+    var out = {}, now = new Date(), r = mulberry(42);
+    for (var i = 1; i < 7; i++) { var d = new Date(now); d.setDate(d.getDate() - i); var o = {}; SUBJECTS.forEach(function (s) { if (r() > 0.45) o[s.id] = 25 * Math.ceil(r() * 3); }); out[dayKey(d)] = o; }
+    return out;
+  }
+
+  /* ---------- Timer: stores an end timestamp, so it stays exact when the tab sleeps ---------- */
+  var T = { mode: 'focus', running: false, endAt: 0, left: MODES.focus * 6e4, total: MODES.focus * 6e4, cycle: store.get('cycle', 0) };
+  var CIRC = 2 * Math.PI * 88, tick = null;
+  var speed = function () { return $('#fast').checked ? 60 : 1; };
+  function fmt(ms) { var s = Math.ceil(ms / 1000), m = Math.floor(s / 60); return pad(m) + ':' + pad(s % 60); }
+  function drawTimer() {
+    var left = T.running ? Math.max(0, (T.endAt - Date.now()) * speed()) : T.left;
+    $('#time').textContent = fmt(left);
+    $('#arc').style.strokeDashoffset = (CIRC * (1 - left / T.total)).toFixed(2);
+    $('#arc').setAttribute('stroke', T.mode === 'focus' ? 'var(--focus)' : 'var(--break)');
+    $('#timeLabel').textContent = T.mode === 'focus' ? subjName(subject) : (T.mode === 'short' ? t('shortB') : t('longB'));
+    $$('#dots i').forEach(function (d, i) { d.classList.toggle('on', i < T.cycle); });
+    $('#playIcon').innerHTML = T.running ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>' : '<path d="M7 4.5v15l13-7.5z"/>';
+    if (T.running && left <= 0) finish();
+  }
+  function setMode(m) {
+    T.mode = m; T.running = false; T.total = T.left = MODES[m] * 6e4;
+    $$('[data-mode]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-mode') === m); });
+    clearInterval(tick); drawTimer();
+  }
+  function start() { T.running = true; T.endAt = Date.now() + T.left / speed(); clearInterval(tick); tick = setInterval(drawTimer, 200); drawTimer(); }
+  function pause() { T.left = Math.max(0, (T.endAt - Date.now()) * speed()); T.running = false; clearInterval(tick); drawTimer(); }
+  function finish() {
+    T.running = false; clearInterval(tick);
+    if (T.mode === 'focus') {
+      var k = dayKey(new Date()); log[k] = log[k] || {}; log[k][subject] = (log[k][subject] || 0) + MODES.focus; store.set('log2', log);
+      T.cycle += 1; var longNext = T.cycle >= 4;
+      banner(t('done'), t('doneT', { m: MODES.focus, s: subjName(subject) }) + (longNext ? t('takeLong') : t('take5')));
+      chime(); if (longNext) T.cycle = 0; store.set('cycle', T.cycle);
+      setMode(longNext ? 'long' : 'short'); renderStats();
+    } else { banner(t('breakOver'), t('ready')); chime(); setMode('focus'); }
+  }
+  var bannerT;
+  function banner(a, b) { $('#bannerTitle').textContent = a; $('#bannerText').textContent = b; $('#banner').classList.add('on'); clearTimeout(bannerT); bannerT = setTimeout(function () { $('#banner').classList.remove('on'); }, 3200); }
+  function renderSubjects() { $('#subjects').innerHTML = SUBJECTS.map(function (s) { return '<button type="button" class="subj" data-subj="' + s.id + '" aria-pressed="' + (s.id === subject) + '">' + tx(s.n) + '</button>'; }).join(''); }
+  function greet() {
+    var h = new Date().getHours(); $('#greet').textContent = h < 12 ? t('gm') : h < 18 ? t('ga') : t('ge');
+    var today = log[dayKey(new Date())] || {}, m = Object.keys(today).reduce(function (a, k) { return a + today[k]; }, 0);
+    $('#focusSub').textContent = m ? t('today', { m: m }) : t('pick');
+    var d = new Date(); $('#clock').textContent = d.getHours() + ':' + pad(d.getMinutes());
+  }
+
+  /* ---------- Plan view ---------- */
+  function renderExams() {
+    $('#exams').innerHTML = EXAMS.map(function (e) {
+      var d = new Date(); d.setDate(d.getDate() + e.in);
+      return '<div class="exam"><div class="d"><b>' + e.in + '</b><small>' + t('daysL') + '</small></div><div><strong>' + subjName(e.s) + '</strong><span>' + d.toLocaleDateString(LOC(), { weekday: 'short', day: 'numeric', month: 'short' }) + ' · ' + t('room') + ' ' + e.room + '</span></div></div>';
+    }).join('');
+    $('#taskIn').placeholder = t('taskPh');
+  }
+  function renderTasks() {
+    $('#tasks').innerHTML = tasks.map(function (x, i) { return '<label class="task' + (x.done ? ' done' : '') + '"><input type="checkbox" data-task="' + i + '"' + (x.done ? ' checked' : '') + '><span>' + esc(tx(x.t)) + '</span><button type="button" data-del="' + i + '" aria-label="Delete">×</button></label>'; }).join('') || '<p class="sub" style="margin-top:8px">' + t('noTasks') + '</p>';
+  }
+
+  /* ---------- Stats view ---------- */
+  function renderStats() {
+    var now = new Date(), days = [], total = 0, bySub = {};
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(now); d.setDate(d.getDate() - i);
+      var o = log[dayKey(d)] || {}, m = 0; Object.keys(o).forEach(function (k) { m += o[k]; bySub[k] = (bySub[k] || 0) + o[k]; });
+      total += m; days.push({ d: d, m: m, today: i === 0 });
+    }
+    var max = Math.max.apply(null, days.map(function (x) { return x.m; }).concat([60]));
+    $('#bars').innerHTML = days.map(function (x) { return '<div class="' + (x.today ? 'today' : '') + '" title="' + x.m + ' ' + t('min') + '"><i style="height:' + Math.round(x.m / max * 78) + '%"></i><small>' + x.d.toLocaleDateString(LOC(), { weekday: 'narrow' }) + '</small></div>'; }).join('');
+    var streak = 0;
+    for (var j = 0; j < 365; j++) { var dd = new Date(now); dd.setDate(dd.getDate() - j); var oo = log[dayKey(dd)], mm = oo ? Object.keys(oo).reduce(function (a, k) { return a + oo[k]; }, 0) : 0; if (mm > 0) streak++; else if (j > 0) break; }
+    $('#kMin').textContent = total; $('#kStreak').textContent = streak;
+    $('#statSub').textContent = t('statSub', { h: (total / 60).toFixed(1), n: Object.keys(bySub).length });
+    var top = Math.max.apply(null, Object.keys(bySub).map(function (k) { return bySub[k]; }).concat([1]));
+    $('#split').innerHTML = SUBJECTS.map(function (s) { var v = bySub[s.id] || 0; return '<div><span>' + tx(s.n) + '</span><span class="num">' + v + ' ' + t('min') + '</span><span class="meter"><i style="width:' + (v / top * 100) + '%;background:' + s.c + '"></i></span></div>'; }).join('');
+    greet();
+  }
+
+  /* ---------- Sound: chime + generated ambience (Web Audio) ---------- */
+  var ctx = null, master = null, analyser = null, current = null;
+  function audio() {
+    if (!ctx) { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ctx = new AC(); master = ctx.createGain(); master.gain.value = +$('#vol').value; analyser = ctx.createAnalyser(); analyser.fftSize = 64; master.connect(analyser); analyser.connect(ctx.destination); }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function chime() {
+    var a = audio(); if (!a) return;
+    [880, 1318.5].forEach(function (f, i) { var o = a.createOscillator(), g = a.createGain(), t0 = a.currentTime + i * 0.18; o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.25, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.2); o.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0 + 1.3); });
+  }
+  function noiseBuffer(a, kind) {
+    var len = a.sampleRate * 4, buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0), last = 0;
+    for (var i = 0; i < len; i++) { var w = Math.random() * 2 - 1; if (kind === 'brown') { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w; }
+    var fade = 2048; for (var j = 0; j < fade; j++) { var k = j / fade; d[j] = d[j] * k + d[len - fade + j] * (1 - k); }
+    return buf;
+  }
+  function playSound(kind) {
+    var a = audio(); if (!a) return; stopSound();
+    var src = a.createBufferSource(); src.buffer = noiseBuffer(a, kind === 'brown' ? 'brown' : 'white'); src.loop = true;
+    var g = a.createGain(); g.gain.value = 0; var chain = src;
+    if (kind === 'rain') { var hp = a.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 900; var lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 7000; chain.connect(hp); hp.connect(lp); chain = lp; var lfo = a.createOscillator(), lg = a.createGain(); lfo.frequency.value = 0.15; lg.gain.value = 0.15; lfo.connect(lg); lg.connect(g.gain); lfo.start(); src._lfo = lfo; }
+    else if (kind === 'room') { var bp = a.createBiquadFilter(); bp.type = 'lowpass'; bp.frequency.value = 420; bp.Q.value = 0.4; chain.connect(bp); chain = bp; }
+    chain.connect(g); g.connect(master); g.gain.linearRampToValueAtTime(kind === 'room' ? 0.9 : 0.55, a.currentTime + 1.2);
+    src.start(); current = { src: src, g: g }; vizLoop();
+  }
+  function stopSound() {
+    if (!current) return; var c = current; current = null;
+    c.g.gain.cancelScheduledValues(ctx.currentTime); c.g.gain.setValueAtTime(c.g.gain.value, ctx.currentTime); c.g.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
+    setTimeout(function () { try { c.src.stop(); if (c.src._lfo) c.src._lfo.stop(); } catch (e) {} }, 450);
+  }
+  function vizLoop() {
+    var bars = $$('#viz i'), data = new Uint8Array(analyser.frequencyBinCount);
+    (function frame() { analyser.getByteFrequencyData(data); bars.forEach(function (b, i) { b.style.height = Math.max(4, data[i % data.length] / 255 * 46) + 'px'; }); if (current) requestAnimationFrame(frame); else bars.forEach(function (b) { b.style.height = '4px'; }); })();
+  }
+
+  /* ---------- Exam-mode widget ---------- */
+  function daysUntil(iso) { var a = new Date(); a.setHours(0, 0, 0, 0); return Math.round((new Date(iso + 'T00:00:00') - a) / 864e5); }
+  function renderPlanWidget() {
+    var ch = Math.max(1, +$('#wCh').value || 1), h = Math.max(0.5, +$('#wH').value || 0.5), days = daysUntil($('#wDate').value);
+    var v = $('#planVerdict');
+    if (!(days > 0)) { $('#planOut').innerHTML = ''; v.className = 'verdict warn'; v.textContent = t('future'); return; }
+    var review = days >= 6 ? 2 : days >= 3 ? 1 : 0, study = days - review, need = ch * 2.5, have = study * h, perDay = study > 0 ? ch / study : ch, sprints = Math.round(h * 60 / 30);
+    $('#planOut').innerHTML = [[t('studyD'), study, 'var(--focus)'], [t('revD'), review, 'var(--break)']].map(function (r) { return '<div class="prow"><span>' + r[0] + '</span><span class="track"><i style="width:' + (r[1] / days * 100) + '%;background:' + r[2] + '"></i></span><small>' + r[1] + ' ' + t('dShort') + '</small></div>'; }).join('') +
+      '<div class="prow"><span>' + t('perDay') + '</span><span>' + (perDay >= 1 ? perDay.toFixed(1) + ' ' + t('chapters') : t('everyN', { n: Math.round(1 / perDay) })) + ' · ' + sprints + ' ' + t('sprints') + '</span><small></small></div>';
+    if (have >= need) { v.className = 'verdict'; v.innerHTML = t('fits', { h: Math.round(have - need) }); }
+    else { v.className = 'verdict warn'; v.innerHTML = t('short', { h: Math.ceil(need - have), d: (need / Math.max(1, study)).toFixed(1) }); }
+  }
+
+  /* ---------- Heatmap ---------- */
+  function renderHeat() {
+    var r = mulberry(7), weeks = 20, cells = '', total = 0, active = 0, end = new Date(), start = new Date(end);
+    start.setDate(start.getDate() - (weeks * 7 - 1) - start.getDay());
+    for (var i = 0; i < weeks * 7; i++) {
+      var d = new Date(start); d.setDate(start.getDate() + i);
+      var base = r() < 0.18 ? 0 : r() * (40 + i / (weeks * 7) * 140), m = d > end ? 0 : Math.round(base / 5) * 5, lvl = m === 0 ? 0 : m < 40 ? 1 : m < 80 ? 2 : m < 130 ? 3 : 4;
+      total += m; if (m) active++;
+      cells += '<i data-l="' + lvl + '" data-tip="' + d.toLocaleDateString(LOC(), { day: 'numeric', month: 'short' }) + ': ' + (m ? m + ' ' + t('min') : t('rest')) + '"></i>';
+    }
+    $('#heat').innerHTML = cells; $('#heatSum').textContent = t('heatSum', { h: Math.round(total / 60), d: active }); $('#heatTip').textContent = t('hover');
+  }
+
+  /* ---------- Static lists, pricing ---------- */
+  var STEPS = [[['Step 1', 'الخطوة ١'], ['Plan backwards', 'خطط بالعكس'], ['Add each exam and how much material it covers. Odak splits it into daily chunks and keeps the last days for revision.', 'أضف كل امتحان وحجم المادة. يقسمها أوداك إلى أجزاء يومية ويحجز الأيام الأخيرة للمراجعة.']],
+    [['Step 2', 'الخطوة ٢'], ['Focus in sprints', 'ركّز على جولات'], ['Start a 25-minute sprint for today\'s chunk. Notifications stay silent until the break.', 'ابدأ جولة ٢٥ دقيقة لجزء اليوم، والإشعارات صامتة حتى وقت الراحة.']],
+    [['Step 3', 'الخطوة ٣'], ['Review honestly', 'راجع بصدق'], ['See your minutes by course and by day. If a course is falling behind, tomorrow\'s plan adjusts.', 'شاهد دقائقك لكل مادة ولكل يوم. إذا تأخرت مادة، تتعدل خطة الغد.']]];
+  var LISTS = {
+    f1l: [['Keeps the final days for revision only', 'يحجز الأيام الأخيرة للمراجعة فقط'], ['Re-plans when you miss a day', 'يعيد التخطيط إذا فاتك يوم'], ['Works for every course at once', 'يعمل لكل المواد معاً']],
+    f2l: [['Generated in real time, never repeats', 'يُولّد مباشرة ولا يتكرر'], ['Fades out when the sprint ends', 'يخفت تدريجياً عند انتهاء الجولة'], ['Works offline', 'يعمل بدون إنترنت']],
+    f3l: [['Hover any day to see the minutes', 'مرّر على أي يوم لترى الدقائق'], ['Streaks survive one rest day per week', 'يوم راحة أسبوعي لا يقطع الاستمرارية'], ['Export to CSV whenever you want', 'صدّر بياناتك متى شئت']]
+  };
+  var LOG = [['v2.4', ['Nov 2026', 'نوفمبر ٢٠٢٦'], ['New', 'جديد'], ['Exam mode plans revision backwards from each exam date.', 'وضع الامتحانات يخطط المراجعة بالعكس من موعد كل امتحان.']],
+    ['v2.3', ['Oct 2026', 'أكتوبر ٢٠٢٦'], ['New', 'جديد'], ['Arabic interface, right to left, plus generated focus sounds.', 'واجهة عربية كاملة من اليمين لليسار، وأصوات تركيز مولدة.']],
+    ['v2.2', ['Sep 2026', 'سبتمبر ٢٠٢٦'], ['Improved', 'تحسين'], ['Stats now split minutes by course and show a 20-week heatmap.', 'الإحصائيات تقسم الدقائق حسب المادة مع خريطة لـ٢٠ أسبوعاً.']],
+    ['v2.1', ['Aug 2026', 'أغسطس ٢٠٢٦'], ['Fixed', 'إصلاح'], ['Timer keeps exact time when the phone locks during a sprint.', 'المؤقت يبقى دقيقاً إذا قُفل الجوال أثناء الجولة.']]];
+  var FAQ = [[['Does the timer work when my phone is locked?', 'هل يعمل المؤقت والجوال مقفل؟'], ['Yes. The sprint end time is saved when you start, so the timer is exact even if the app is closed.', 'نعم. يُحفظ وقت انتهاء الجولة عند بدايتها، فيبقى المؤقت دقيقاً حتى لو أُغلق التطبيق.']],
+    [['Do I need an account?', 'هل أحتاج حساباً؟'], ['No. Everything is stored on your phone. An account is only needed to sync between devices with Pro.', 'لا. كل بياناتك على جوالك، والحساب مطلوب فقط للمزامنة بين الأجهزة في باقة برو.']],
+    [['Can I change the sprint length?', 'هل يمكنني تغيير مدة الجولة؟'], ['Yes. Focus can be 15 to 90 minutes and breaks 3 to 30 minutes.', 'نعم. التركيز من ١٥ إلى ٩٠ دقيقة، والراحة من ٣ إلى ٣٠ دقيقة.']],
+    [['How does the student discount work?', 'كيف يعمل خصم الطلاب؟'], ['Sign up with your university email and we send a code that makes Pro 50% off while you are a student.', 'سجّل بإيميل جامعتك، ونرسل لك كوداً يجعل برو بنصف السعر طوال فترة دراستك.']]];
+  var bill = 'y';
+  function cur(n) { return lang === 'ar' ? n.toFixed(2) + ' ر.س' : 'SAR ' + n.toFixed(2); }
+  function renderPlans() {
+    var P = [
+      { n: ['Free', 'مجاني'], m: 0, y: 0, note: ['Forever', 'للأبد'], items: [[['Unlimited focus sprints', 'جولات تركيز غير محدودة'], 1], [['3 courses', '٣ مواد'], 1], [['7-day stats', 'إحصائيات ٧ أيام'], 1], [['Exam mode', 'وضع الامتحانات'], 0], [['Focus sounds', 'أصوات التركيز'], 0], [['Sync across devices', 'مزامنة الأجهزة'], 0]], cta: ['Download free', 'حمّل مجاناً'], cls: 'ghost' },
+      { n: ['Pro', 'برو'], m: 11.99, y: 95.99, items: [[['Unlimited sprints and courses', 'جولات ومواد غير محدودة'], 1], [['Exam mode with re-planning', 'وضع الامتحانات مع إعادة التخطيط'], 1], [['Full history and heatmap', 'السجل الكامل والخريطة الحرارية'], 1], [['All focus sounds', 'كل أصوات التركيز'], 1], [['Sync across devices', 'مزامنة الأجهزة'], 1], [['CSV export', 'تصدير البيانات'], 1]], cta: ['Start 14-day trial', 'جرّب ١٤ يوماً مجاناً'], cls: 'primary', pro: 1 },
+      { n: ['Campus', 'الجامعات'], m: 5.99, y: 47.99, note: ['Per student, 50 seats minimum', 'لكل طالب، ٥٠ مقعداً كحد أدنى'], items: [[['Everything in Pro', 'كل مميزات برو'], 1], [['Course templates from your faculty', 'قوالب المواد من كليتك'], 1], [['Shared exam calendars', 'تقويم امتحانات مشترك'], 1], [['Anonymous class stats for instructors', 'إحصائيات مجهولة الهوية للأساتذة'], 1], [['Single sign-on', 'تسجيل دخول موحد'], 1], [['Priority support', 'دعم أولوية'], 1]], cta: ['Talk to us', 'تواصل معنا'], cls: 'dark' }
+    ];
+    $('#plans').innerHTML = P.map(function (p) {
+      var price = bill === 'm' ? p.m : p.y / 12, note = p.note ? tx(p.note) : (bill === 'y' ? t('billedY', { p: cur(p.y) }) : t('billedM'));
+      return '<article class="plan' + (p.pro ? ' pro' : '') + '"><h3>' + tx(p.n) + '</h3><div class="price num">' + (price ? cur(price) : (lang === 'ar' ? '0 ر.س' : 'SAR 0')) + '<small> ' + t('perMonth') + '</small></div><div class="note">' + note + '</div><ul>' +
+        p.items.map(function (i) { return '<li' + (i[1] ? '' : ' class="off"') + '>' + tx(i[0]) + '</li>'; }).join('') + '</ul><a class="btn ' + p.cls + '" href="#download">' + tx(p.cta) + '</a></article>';
+    }).join('');
+    $$('[data-bill]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-bill') === bill); });
+  }
+  function storeButtons() {
+    return '<a class="store" href="#pricing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 5h3"/></svg><span><small>' + t('iphoneS') + '</small><b>' + t('iphone') + '</b></span></a>' +
+      '<a class="store" href="#pricing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="2.5" width="12" height="19" rx="2"/><path d="M10 18.5h4"/></svg><span><small>' + t('androidS') + '</small><b>' + t('android') + '</b></span></a>';
+  }
+  function renderStatic() {
+    $('#download').innerHTML = $('#stores2').innerHTML = storeButtons();
+    $('#steps').innerHTML = STEPS.map(function (s) { return '<div class="step"><div class="n">' + tx(s[0]) + '</div><h3>' + tx(s[1]) + '</h3><p>' + tx(s[2]) + '</p></div>'; }).join('');
+    Object.keys(LISTS).forEach(function (k) { $('#' + k).innerHTML = LISTS[k].map(function (i) { return '<li>' + tx(i) + '</li>'; }).join(''); });
+    $('#log').innerHTML = LOG.map(function (l) { return '<div><b>' + l[0] + '<small>' + tx(l[1]) + '</small></b><p><span class="tag">' + tx(l[2]) + '</span>' + tx(l[3]) + '</p></div>'; }).join('');
+    $('#faqList').innerHTML = FAQ.map(function (f) { return '<details><summary>' + tx(f[0]) + '</summary><p>' + tx(f[1]) + '</p></details>'; }).join('');
+  }
+
+  /* ---------- Language + wiring ---------- */
+  function applyLang() {
+    var r = document.documentElement; r.lang = lang; r.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    $$('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
+    $$('[data-i18n-html]').forEach(function (el) { el.innerHTML = t(el.getAttribute('data-i18n-html')); });
+    $('#langBtn').textContent = lang === 'ar' ? 'EN' : 'ع';
+    renderStatic(); renderSubjects(); drawTimer(); renderExams(); renderTasks(); renderStats(); renderPlanWidget(); renderHeat(); renderPlans();
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-mode],[data-subj],[data-tab],[data-del],[data-snd],[data-bill]');
+    if (!el) return;
+    if (el.hasAttribute('data-mode')) setMode(el.getAttribute('data-mode'));
+    else if (el.hasAttribute('data-subj')) { subject = el.getAttribute('data-subj'); store.set('subject2', subject); renderSubjects(); drawTimer(); }
+    else if (el.hasAttribute('data-tab')) { var id = el.getAttribute('data-tab'); $$('[data-tab]').forEach(function (b) { b.setAttribute('aria-selected', b === el); }); $$('.view').forEach(function (v) { v.hidden = v.id !== id; }); if (id === 'vStats') renderStats(); }
+    else if (el.hasAttribute('data-del')) { tasks.splice(+el.getAttribute('data-del'), 1); store.set('tasks2', tasks); renderTasks(); }
+    else if (el.hasAttribute('data-snd')) { var on = el.getAttribute('aria-pressed') === 'true'; $$('[data-snd]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); }); if (on) stopSound(); else { el.setAttribute('aria-pressed', 'true'); playSound(el.getAttribute('data-snd')); } }
+    else if (el.hasAttribute('data-bill')) { bill = el.getAttribute('data-bill'); renderPlans(); }
+  });
+  document.addEventListener('change', function (e) { if (e.target.hasAttribute('data-task')) { var i = +e.target.getAttribute('data-task'); tasks[i].done = e.target.checked; store.set('tasks2', tasks); renderTasks(); } });
+  $('#play').addEventListener('click', function () { audio(); if (T.running) pause(); else start(); });
+  $('#reset').addEventListener('click', function () { setMode(T.mode); });
+  $('#skip').addEventListener('click', function () { if (T.mode === 'focus') { T.running = true; T.endAt = Date.now(); finish(); } else setMode('focus'); });
+  $('#fast').addEventListener('change', function () { if (T.running) { var left = T.left = Math.max(0, (T.endAt - Date.now()) * (this.checked ? 1 : 60)); T.endAt = Date.now() + left / speed(); } });
+  $('#taskForm').addEventListener('submit', function (e) { e.preventDefault(); var v = $('#taskIn').value.trim(); if (!v) return; tasks.unshift({ t: v, done: false }); store.set('tasks2', tasks); $('#taskIn').value = ''; renderTasks(); });
+  $('#vol').addEventListener('input', function () { if (master) master.gain.value = +this.value; });
+  ['#wDate', '#wCh', '#wH'].forEach(function (s) { $(s).addEventListener('input', renderPlanWidget); });
+  $('#heat').addEventListener('mouseover', function (e) { var c = e.target.closest('[data-tip]'); if (c) $('#heatTip').textContent = c.getAttribute('data-tip'); });
+  $('#langBtn').addEventListener('click', function () { lang = lang === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('odak.lang', lang); } catch (e) {} applyLang(); });
+  $('#themeBtn').addEventListener('click', function () { var r = document.documentElement, c = r.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); var n = c === 'dark' ? 'light' : 'dark'; r.setAttribute('data-theme', n); try { localStorage.setItem('odak.theme', n); } catch (e) {} });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) drawTimer(); });
+
+  $('#viz').innerHTML = new Array(33).join('<i></i>');
+  var nd = new Date(); nd.setDate(nd.getDate() + 18); $('#wDate').value = dayKey(nd);
+  $('#yr').textContent = new Date().getFullYear();
+  setMode('focus'); applyLang();
+  setInterval(greet, 30000);
+})();
+</script>
+</body>
+</html>
