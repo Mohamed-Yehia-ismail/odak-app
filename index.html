@@ -159,8 +159,8 @@ h1 .ring{color:var(--focus)}
 .split div{display:grid;grid-template-columns:1fr auto;gap:4px;font-size:11.5px}
 .split .meter{grid-column:1/-1;height:5px;border-radius:5px;background:var(--screen-line);overflow:hidden}
 .split .meter i{display:block;height:100%;border-radius:5px}
-.banner{position:absolute;left:10px;right:10px;top:46px;background:var(--screen-ink);color:var(--screen);border-radius:16px;padding:10px 12px;font-size:12px;z-index:5;transform:translateY(-150%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;gap:9px;align-items:center}
-.banner.on{transform:none}
+.banner{position:absolute;left:10px;right:10px;top:46px;background:var(--screen-ink);color:var(--screen);border-radius:16px;padding:10px 12px;font-size:12px;z-index:5;transform:translateY(-150%);opacity:0;visibility:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s,visibility 0s .35s;display:flex;gap:9px;align-items:center}
+.banner.on{transform:none;opacity:1;visibility:visible;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s,visibility 0s}
 .banner i{width:26px;height:26px;border-radius:8px;background:var(--focus);flex:none}
 
 /* sections */
